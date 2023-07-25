@@ -1193,7 +1193,8 @@ def annotate_phrases(text, phrases_list, hpo_tree, fasttext_model, cnn_model, be
         result_list = sorted([result_list[idx] for idx in range(len(result_list)) if idx not in idx_to_remove],
                              key=lambda x: x[0].start_loc)
 		
-		# 输出结果
+        # 输出结果
+        ret_dicts = []
         for item in result_list:
             if not item[0].no_flag:
                 if output_file_path is not None:
@@ -1201,15 +1202,29 @@ def annotate_phrases(text, phrases_list, hpo_tree, fasttext_model, cnn_model, be
                         f"{item[0].start_loc}\t{item[0].end_loc}\t{text[item[0].start_loc:item[0].end_loc]}\t{item[1]}\t{'%.2f' % (item[2])}\n")
                 else:
                     output_file += f"{item[0].start_loc}\t{item[0].end_loc}\t{text[item[0].start_loc:item[0].end_loc]}\t{item[1]}\t{'%.2f' % (item[2])}\n"
+                ret_dicts.append({ # yuhuang add
+                    'span': (item[0].start_loc, item[0].end_loc),
+                    'mention_text': text[item[0].start_loc:item[0].end_loc],
+                    'hpo_code': item[1],
+                    'score': float(item[2]),
+                    'polarity': 'positive',
+                })
             else:
                 if output_file_path is not None:
                     output_file.write(
                         f"{item[0].start_loc}\t{item[0].end_loc}\t{text[item[0].start_loc:item[0].end_loc]}\t{item[1]}\t{'%.2f' % (item[2])}\tNeg\n")
                 else:
                     output_file += f"{item[0].start_loc}\t{item[0].end_loc}\t{text[item[0].start_loc:item[0].end_loc]}\t{item[1]}\t{'%.2f' % (item[2])}\tNeg\n"
-
+                    ret_dicts.append({  # yuhuang add
+                        'span': (item[0].start_loc, item[0].end_loc),
+                        'mention_text': text[item[0].start_loc:item[0].end_loc],
+                        'hpo_code': item[1],
+                        'score': float(item[2]),
+                        'polarity': 'negative',
+                    })
         if output_file_path is not None:
             output_file.close()
-            return None
-        else:
-            return output_file
+            # return None
+        # else:
+        #     return output_file
+        return ret_dicts  # yuhuang add
