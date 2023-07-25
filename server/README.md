@@ -61,7 +61,7 @@ Reference：
 - [https://blog.csdn.net/m0_54218917/article/details/120113221](https://blog.csdn.net/m0_54218917/article/details/120113221)
 
 # Test server locally
-Server：
+Server: 
 
 ```shell
 export PYTHONPATH=`pwd`/phenobert/utils:`pwd`/server:$PYTHONPATH
@@ -70,7 +70,7 @@ cd phenobert/utils
 python3 ../../server/server/service.py
 ```
 
-Client：
+Client: 
 
 ```shell
 cd server
@@ -95,7 +95,7 @@ python server/test_service.py # In anather terminal
 cd .. && mv server PhenoBERT
 ```
 
-## 镜像运行debug
+## debug in container
 ```shell
 # Run container in the background：
 docker run -itd --entrypoint /bin/bash -p 8085:8085 --name phenobert phenobert:v20230722
@@ -110,7 +110,7 @@ docker save [imageID] -o ./phenobert.tar
 
 # Import image tar
 docker load -i phenobert.tar
-docker tag [imageID] phenobert:v20230722 # 重新打tag
+docker tag [imageID] phenobert:v20230722 # re-tag
 ```
 
 # Running service
